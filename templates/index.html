@@ -511,25 +511,31 @@
       <div class="container">
 
         <div class="row gy-4">
-
+          {% for member in team_members %}
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
             <div class="team-member d-flex align-items-start">
-              <div class="pic"><img src="{% static 'assets/img/team/team-1.jpg' %}" class="img-fluid" alt=""></div>
+              <div class="pic">
+                {% if member.profile_image %}
+                    <img src="{{ member.profile_image.url }}" alt="{{ member.name }}" class="img-fluid" style='width=100%'>
+                {% endif %}
+                {% comment %} <img src="{% static 'assets/img/team/team-1.jpg' %}" class="img-fluid" alt=""> {% endcomment %}
+              </div>
               <div class="member-info">
-                <h4>Walter White</h4>
-                <span>Chief Executive Officer</span>
-                <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
+                <h4>{{ member.name }}</h4>
+                <span>{{ member.role }}</span>
+                <p>{{ member.about }}</p>
                 <div class="social">
-                  <a href=""><i class="bi bi-twitter-x"></i></a>
-                  <a href=""><i class="bi bi-facebook"></i></a>
-                  <a href=""><i class="bi bi-instagram"></i></a>
-                  <a href=""> <i class="bi bi-linkedin"></i> </a>
+                  <a href="{{ member.x_url }}"><i class="bi bi-twitter-x"></i></a>
+                  <a href="{{ member.facebook_url }}"><i class="bi bi-facebook"></i></a>
+                  <a href="{{ member.instagram_url }}"><i class="bi bi-instagram"></i></a>
+                  <a href="{{ member.linkedin_url }}"> <i class="bi bi-linkedin"></i> </a>
                 </div>
               </div>
             </div>
           </div><!-- End Team Member -->
+          {% endfor %}
 
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+          {% comment %} <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
             <div class="team-member d-flex align-items-start">
               <div class="pic"><img src="{% static 'assets/img/team/team-2.jpg' %}" class="img-fluid" alt=""></div>
               <div class="member-info">
@@ -544,9 +550,9 @@
                 </div>
               </div>
             </div>
-          </div><!-- End Team Member -->
+          </div><!-- End Team Member --> {% endcomment %}
 
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+          {% comment %} <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
             <div class="team-member d-flex align-items-start">
               <div class="pic"><img src="{% static 'assets/img/team/team-3.jpg' %}" class="img-fluid" alt=""></div>
               <div class="member-info">
@@ -561,9 +567,9 @@
                 </div>
               </div>
             </div>
-          </div><!-- End Team Member -->
+          </div><!-- End Team Member --> {% endcomment %}
 
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+          {% comment %} <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
             <div class="team-member d-flex align-items-start">
               <div class="pic"><img src="{% static 'assets/img/team/team-4.jpg' %}" class="img-fluid" alt=""></div>
               <div class="member-info">
@@ -578,7 +584,7 @@
                 </div>
               </div>
             </div>
-          </div><!-- End Team Member -->
+          </div><!-- End Team Member --> {% endcomment %}
 
         </div>
 

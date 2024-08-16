@@ -1,14 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from .models import TeamMember
 
-# Create your views here.
 
 def index(request):
-    return render(request, 'index.html')
-
-def counter(request):
-    text = request.POST['text']
-    length = len(text.strip())
-    words_count = len(text.split())
-    context = {"length": length, 'words_count' : words_count}
-    return render(request, "counter.html", context)
+    team_members = TeamMember.objects.all()  # Fetch all TeamMember objects
+    context = {"team_members": team_members}
+    return render(request, "index.html", context)
