@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
-from django.contrib.auth.forms import AuthenticationForm
 from .models import Customer
 from django.contrib import messages
 from .forms import CustomerForm
@@ -20,14 +19,20 @@ def error(request):
 
 def login(request):
     if request.method == "POST":
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            auth_login(request, user)
-            return redirect("index")
+        username = request.POST['username']
+        password = request.POST['password']
+        
+        user = auth.authenticate(username=username, password=password)
+        
+        if user is not None:
+            auth.login(request, user)
+            return redirect('/')
+        else:
+            messages.info(request, 'Username or Password is Invalid')
+            return redirect('login')
+        
     else:
-        form = AuthenticationForm()
-    return render(request, "login.html", {"form": form})
+        return render(request, "login.html")
 
 
 def register(request):
@@ -51,7 +56,7 @@ def register(request):
                     username=username, password=password, email=email
                 )
                 user.save()
-
+    
                 # Create associated Customer instance
                 customer = Customer.objects.create(
                     user=user,
@@ -92,3 +97,14 @@ def create_customer(request):
 def logout(request):
     auth_logout(request)
     return redirect("login")
+
+
+## Some code for debugging
+def some_view(request):
+    if request.user.is_authenticated:
+        try:
+            customer = request.user.customer
+            print(f"Customer name: {customer.name}")
+        except Customer.DoesNotExist:
+            print("No customer object for this user")
+    return render(request, "your_template.html")
