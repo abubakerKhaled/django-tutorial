@@ -30,6 +30,8 @@ ALLOWED_HOSTS = []
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+LOGIN_URL = "login"
+
 
 # Application definition
 

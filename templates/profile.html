@@ -28,7 +28,7 @@
         <!-- ======= Header ======= -->
         <header id="header" class="header fixed-top d-flex align-items-center">
             <div class="d-flex align-items-center justify-content-between">
-                <a href="index.html" class="logo d-flex align-items-center">
+                <a href="{% url 'index' %}" class="logo d-flex align-items-center">
                 <img src="{% static 'assets/img/logo.png' %}" alt="">
                 <span class="d-none d-lg-block">NiceAdmin</span>
                 </a>
@@ -174,10 +174,10 @@
                                         <button class="nav-link active" data-bs-target="#profile-overview">Overview</button>
                                     </li>
                                     <li class="nav-item">
-                                        <button class="nav-link" data-bs-toggle="#profile-edit" onclick="location.href='{% url 'update_profile' %}'">Edit Profile</button>
+                                        <button class="nav-link" data-bs-toggle="#profile-edit" >Edit Profile</button>
                                     </li>
                                     <li class="nav-item">
-                                        <button class="nav-link" data-bs-toggle="#profile-change-password" onclick="location.href='{% url 'change_password' %}'">Change Password</button>
+                                        <button class="nav-link" data-bs-toggle="#profile-change-password" >Change Password</button>
                                     </li>
                                 </ul>
                                 <div class="tab-content pt-2">
@@ -226,7 +226,7 @@
                                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
                                             {% endif %}
-                                            <form method="post" enctype="multipart/form-data" action="{% url 'update_profile' %}">
+                                            <form method="post" enctype="multipart/form-data">
                                                 {% csrf_token %}
                                                 <div class="row mb-3">
                                                     <label for="{{ profile_form.profile_image.id_for_label }}" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
@@ -264,7 +264,7 @@
                                         </div>
                                         <!-- Change Password Form -->
                                         <div class="tab-pane fade pt-3" id="profile-change-password">
-                                            <form method="post" action="{% url 'change_password' %}">
+                                            <form method="post">
                                                 {% csrf_token %}
                                                 <div class="row mb-3">
                                                     <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>

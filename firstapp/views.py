@@ -61,7 +61,7 @@ def change_password(request):
     return redirect("profile")
 
 
-def error(request):
+def custom_404(request):
     return render(request, "error-404.html", status=404)
 
 
@@ -126,4 +126,3 @@ def register(request):
 def logout(request):
     auth_logout(request)
     return redirect("login")
-
