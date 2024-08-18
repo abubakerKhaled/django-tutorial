@@ -1,36 +1,84 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
 from .models import Customer
 from django.contrib import messages
-from .forms import CustomerForm
+from .forms import CustomerUpdateForm, CustomerPasswordChangeForm
 
 
+@login_required
 def index(request):
     if request.user.is_authenticated:
         return render(request, "index.html", {"user": request.user})
     return redirect("login")
 
 
+@login_required
+def profile(request):
+    customer = request.user.customer
+
+    # Render the profile page with forms
+    profile_form = CustomerUpdateForm(instance=customer)
+    password_form = CustomerPasswordChangeForm(user=request.user)
+
+    return render(
+        request,
+        "profile.html",
+        {"profile_form": profile_form, "password_form": password_form},
+    )
+
+
+@login_required
+def update_profile(request):
+    customer = request.user.customer
+
+    if request.method == "POST":
+        form = CustomerUpdateForm(request.POST, request.FILES, instance=customer)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your profile has been updated successfully.")
+            return redirect("profile")
+        else:
+            messages.error(request, "Please correct the error below.")
+
+    return redirect("profile")
+
+
+@login_required
+def change_password(request):
+    if request.method == "POST":
+        form = CustomerPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Your password was successfully updated!")
+            return redirect("profile")
+        else:
+            messages.error(request, "Please correct the error below.")
+
+    return redirect("profile")
+
+
 def error(request):
-    return render(request, "error-404.html")
+    return render(request, "error-404.html", status=404)
 
 
 def login(request):
     if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        
+        username = request.POST["username"]
+        password = request.POST["password"]
+
         user = auth.authenticate(username=username, password=password)
-        
+
         if user is not None:
             auth.login(request, user)
-            return redirect('/')
+            return redirect("/")
         else:
-            messages.info(request, 'Username or Password is Invalid')
-            return redirect('login')
-        
+            messages.info(request, "Username or Password is Invalid")
+            return redirect("login")
+
     else:
         return render(request, "login.html")
 
@@ -56,13 +104,12 @@ def register(request):
                     username=username, password=password, email=email
                 )
                 user.save()
-    
+
                 # Create associated Customer instance
                 customer = Customer.objects.create(
                     user=user,
                     name=name,
                     username=username,
-                    password=password,
                     email=email,
                 )
                 customer.save()
@@ -76,35 +123,7 @@ def register(request):
 
 
 @login_required
-def profile(request):
-    return render(request, "profile.html", {"user": request.user})
-
-
-@login_required
-def create_customer(request):
-    if request.method == "POST":
-        form = CustomerForm(request.POST, request.FILES)  # Handle file uploads
-        if form.is_valid():
-            customer = form.save(commit=False)
-            customer.user = request.user  # Link Customer to User
-            customer.save()
-            return redirect("profile")  # Redirect to profile or another page
-    else:
-        form = CustomerForm()
-    return render(request, "create_customer.html", {"form": form})
-
-
 def logout(request):
     auth_logout(request)
     return redirect("login")
 
-
-## Some code for debugging
-def some_view(request):
-    if request.user.is_authenticated:
-        try:
-            customer = request.user.customer
-            print(f"Customer name: {customer.name}")
-        except Customer.DoesNotExist:
-            print("No customer object for this user")
-    return render(request, "your_template.html")
