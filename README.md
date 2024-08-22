@@ -86,10 +86,6 @@ This repository is designed as a step-by-step guide for learning Django, with ea
 
 3. **Run the Project**:
    - Ensure you have the necessary Python environment set up.
-   - Install the required dependencies:
-     ```bash
-     pip install -r requirements.txt
-     ```
    - Apply migrations (if necessary):
      ```bash
      python manage.py migrate
