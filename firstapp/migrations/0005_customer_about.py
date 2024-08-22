@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='customer',
             name='about',
-            field=models.CharField(default=None, max_length=500),
+            field=models.CharField(default='This is the default about section.', max_length=500, null=True, blank=True),
             preserve_default=False,
         ),
     ]

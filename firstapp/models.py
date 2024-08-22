@@ -12,6 +12,11 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     username = models.CharField(max_length=250, unique=True)  # Required field
     name = models.CharField(max_length=250)
+    about = models.TextField(
+        default="This is the default about section.",
+        null=True,
+        blank=True,
+    )
     password = models.CharField(max_length=128)
     email = models.EmailField(max_length=250)  # Required field
     company = models.CharField(max_length=250, blank=True)
