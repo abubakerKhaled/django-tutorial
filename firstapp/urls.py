@@ -17,11 +17,12 @@ urlpatterns = [
     path("register.html/", views.register, name="register"),
     path("profile/", views.profile, name="profile"),
     path("profile.html/", views.profile, name="profile"),
+    path("index.html/profile.html/", views.profile, name="profile"),
+    path("index.html/profile/", views.profile, name="profile"),
     path("logout/", views.logout, name="logout"),
+    path("index.html/logout/", views.logout, name="logout"),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# Remove or comment out handler404 if not using custom 404 view
-# handler404 = views.custom_404
